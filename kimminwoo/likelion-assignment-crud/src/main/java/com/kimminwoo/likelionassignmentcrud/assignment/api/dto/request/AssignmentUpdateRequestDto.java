@@ -12,9 +12,6 @@ public record AssignmentUpdateRequestDto(
 
         @NotBlank(message = "내용은 비워둘 수 없습니다.")
         @Size(min = 5, max = 1000, message = "내용은 5자 이상 1000자 이하이어야 합니다.")
-        String content,
-
-        @NotNull(message = "학생 ID는 필수입니다.")
-        Long studentId
+        String content
 
 ) {}
