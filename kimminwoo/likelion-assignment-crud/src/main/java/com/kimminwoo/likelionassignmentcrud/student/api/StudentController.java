@@ -9,6 +9,8 @@ import com.kimminwoo.likelionassignmentcrud.student.api.dto.response.StudentList
 import com.kimminwoo.likelionassignmentcrud.student.application.StudentService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -18,38 +20,41 @@ public class StudentController {
 
     private final StudentService studentService;
 
-    // Create
+    // 학생 저장
     @PostMapping
-    public ApiResTemplate<Void> saveStudent(@RequestBody @Valid StudentSaveRequestDto requestDto) {
+    public ResponseEntity<ApiResTemplate<Void>> saveStudent(@RequestBody @Valid StudentSaveRequestDto requestDto) {
         studentService.saveStudent(requestDto);
-        return ApiResTemplate.successWithNoContent(SuccessCode.STUDENT_SAVE_SUCCESS);
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(ApiResTemplate.successWithNoContent(SuccessCode.STUDENT_SAVE_SUCCESS));
     }
 
-    // Read All
+    // 전체 학생 조회
     @GetMapping
-    public ApiResTemplate<StudentListResponseDto> getAllStudents() {
-        return ApiResTemplate.successResponse(SuccessCode.GET_SUCCESS, studentService.getAllStudents());
+    public ResponseEntity<ApiResTemplate<StudentListResponseDto>> getAllStudents() {
+        StudentListResponseDto response = studentService.getAllStudents();
+        return ResponseEntity.ok(ApiResTemplate.successResponse(SuccessCode.GET_SUCCESS, response));
     }
 
-    // Read One
+    // 개별 학생 조회
     @GetMapping("/{studentId}")
-    public ApiResTemplate<StudentInfoResponseDto> getStudentById(@PathVariable Long studentId) {
-        return ApiResTemplate.successResponse(SuccessCode.GET_SUCCESS, studentService.getStudentById(studentId));
+    public ResponseEntity<ApiResTemplate<StudentInfoResponseDto>> getStudentById(@PathVariable Long studentId) {
+        StudentInfoResponseDto response = studentService.getStudentById(studentId);
+        return ResponseEntity.ok(ApiResTemplate.successResponse(SuccessCode.GET_SUCCESS, response));
     }
 
-    // Update
+    // 학생 수정
     @PutMapping("/{studentId}")
-    public ApiResTemplate<Void> updateStudent(
+    public ResponseEntity<ApiResTemplate<Void>> updateStudent(
             @PathVariable Long studentId,
             @RequestBody @Valid StudentUpdateRequestDto requestDto) {
         studentService.updateStudent(studentId, requestDto);
-        return ApiResTemplate.successWithNoContent(SuccessCode.STUDENT_UPDATE_SUCCESS);
+        return ResponseEntity.ok(ApiResTemplate.successWithNoContent(SuccessCode.STUDENT_UPDATE_SUCCESS));
     }
 
-    // Delete
+    // 학생 삭제
     @DeleteMapping("/{studentId}")
-    public ApiResTemplate<Void> deleteStudent(@PathVariable Long studentId) {
+    public ResponseEntity<ApiResTemplate<Void>> deleteStudent(@PathVariable Long studentId) {
         studentService.deleteStudent(studentId);
-        return ApiResTemplate.successWithNoContent(SuccessCode.STUDENT_DELETE_SUCCESS);
+        return ResponseEntity.ok(ApiResTemplate.successWithNoContent(SuccessCode.STUDENT_DELETE_SUCCESS));
     }
 }

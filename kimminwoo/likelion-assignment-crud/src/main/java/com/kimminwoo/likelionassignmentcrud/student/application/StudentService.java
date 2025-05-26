@@ -51,7 +51,8 @@ public class StudentService {
     @Transactional
     public void updateStudent(Long id, StudentUpdateRequestDto requestDto) {
         Student student = studentRepository.findById(id)
-                .orElseThrow(() -> new BusinessException(ErrorCode.STUDENT_NOT_FOUND));
+                .orElseThrow(() ->
+                        new BusinessException(ErrorCode.STUDENT_NOT_FOUND));
 
         student.update(requestDto.name(), requestDto.phoneNumber());
     }
@@ -59,7 +60,8 @@ public class StudentService {
     @Transactional
     public void deleteStudent(Long id) {
         Student student = studentRepository.findById(id)
-                .orElseThrow(() -> new BusinessException(ErrorCode.STUDENT_NOT_FOUND));
+                .orElseThrow(() ->
+                        new BusinessException(ErrorCode.STUDENT_NOT_FOUND));
 
         studentRepository.delete(student);
     }
